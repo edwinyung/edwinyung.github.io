@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+
+Intuition behind Asynchronous Javascript
+
+Asynchronous Javascript is difficult to wrangle. Even after reading the documentation, scouring the web, and implementing the code, I still found them puzzling. The following is my quick attempt to elucidate their inner workings.
+
+Before we get started, we need to distinguish between synchronous and asynchronous. Synchronous is defined as "happening at the same time". In computing, synchronous operations happen in order, one after the other like falling dominoes. Many programming languages synchronously comb through the code. It intuitively makes sense: you expect that your code happens in the order in which it was written.
+
+Function1()
+Function2()
+
+Synchronously, Function2() only executes upon the completion of Function1().
+
+In programming, and in life, we don't want to wait for a function to finish to be able to do something else. Imagine web browsing and waiting ten minutes for a request to finish loading. Fortunately, Javascript has asynchronous functions that allow events to happen outside the normal execution flow without blocking the whole thing. We can deal with out of sync events such as button clicks and timeouts.
+
+Some functions can finish their execution faster than functions that nominally happened "first". This sounds like it would be "synchronous" under our colloquial definition, but Javascript is mimicking multi-threaded operations where each function is passed to a separate "thread" of execution and the threads race to complete. There is no waiting around like in synchronous land. Formally, since Javascript is single-threaded, it accomplishes asynchronous functions through the event loop (see endnotes).
+
+A way to "synchronize" these asynchronous functions is to use a callback. A callback is a function that is passed as an argument to another function (the "parent"), and is executed ("call you back" or "called at the back") after the parent function finishes its own code. Like a queue, each callback function is appended to the existing ones and popped out in First-In-First-Out (FIFO) fashion.
+
+Often, multiple nested callbacks results in messy looking code (see callbackhell.com). One of the best ways to escape callback hell is to use promises. A promise is an object that represents the future result of an asynchronous event.
+
+Promises allow us to easily chain asynchronous operations in sequence and restores powerful tools that we lost when using callbacks: we can throw synchronous errors, end the chain with a catch for errors, and return additional promises or synchronous values.
+
+Promises are created with the new Promise() keyword, which in Javascript constructs a Promise object which takes a function as an argument that in turn takes two default functions as parameters: resolve and reject. Resolve, which is mandatory, executes upon successful completion of the promise and it can take a parameter that it will return as a value upon completion. Reject is optional and executes if there is an error from the promise.
+
+The Promise object has a .then() method that we use to interact with the promise and chain additional promises. It takes the result of the object and returns more promises or synchronous values, or it can be used to throw synchronous errors.
+
+In essence, the Promise object may be thought of something like this:
+function Promise(callback function with resolve and reject and async tasks) {
+  //function resolve(parameter)
+  //function reject(parameter)
+  //other stuff
+  //this.then method that returns new Promise
+  //execute the passed in callback function that will use all these functions in this Promise body
+}
+
+Essentially, promises are structured callbacks. We can simplify things even further by using ES7's new async/await capability. This allows us to convert the promise chain to an intuitive try/catch/return structure. This is mostly syntactic sugar, where we can declare functions to be "async" at the outset and preface each promise with keyword "await", wrapped by try/catch/return.
+
+I have oversimplified many things, but hopefully this solidifies our intuition of promises. Here are my sources and further reading material.
+
+For more about callbacks, see:
+https://stackoverflow.com/questions/13286233/pass-a-javascript-function-as-parameter
+https://stackoverflow.com/questions/824234/what-is-a-callback-function
+https://stackoverflow.com/questions/5187968/how-should-i-call-3-functions-in-order-to-execute-them-one-after-the-other
+
+For more about promises, see:
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises
+https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-promise-27fc71e77261
+https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html
+https://pouchdb.com/2015/03/05/taming-the-async-beast-with-es7.html
+http://www.mattgreer.org/articles/promises-in-wicked-detail/
+
+For more about the event loop, see:
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop#Runtime_concepts
+https://hackernoon.com/understanding-js-the-event-loop-959beae3ac40
