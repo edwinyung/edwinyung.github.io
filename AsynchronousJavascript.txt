@@ -1,5 +1,3 @@
-<!DOCTYPE HTML>
-
 Intuition behind Asynchronous Javascript
 
 Asynchronous Javascript is difficult to wrangle. Even after reading the documentation, scouring the web, and implementing the code, I still found them puzzling. The following is my quick attempt to elucidate their inner workings.
