@@ -13,13 +13,15 @@ In programming, and in life, we don't want to wait for a function to finish to b
 
 Some functions can finish their execution faster than functions that nominally happened "first". This sounds like it would be "synchronous" under our colloquial definition, but Javascript is mimicking multi-threaded operations where each function is passed to a separate "thread" of execution and the threads race to complete. There is no waiting around like in synchronous land. Formally, since Javascript is single-threaded, it accomplishes asynchronous functions through the event loop (see endnotes).
 
+Briefly, synchronous = "blocking" and asynchronous = "deferred".
+
 A way to "synchronize" these asynchronous functions is to use a callback. A callback is a function that is passed as an argument to another function (the "parent"), and is executed ("call you back" or "called at the back") after the parent function finishes its own code. Like a queue, each callback function is appended to the existing ones and popped out in First-In-First-Out (FIFO) fashion.
 
 Often, multiple nested callbacks results in messy looking code (see callbackhell.com). One of the best ways to escape callback hell is to use promises. A promise is an object that represents the future result of an asynchronous event.
 
 Promises allow us to easily chain asynchronous operations in sequence and restores powerful tools that we lost when using callbacks: we can throw synchronous errors, end the chain with a catch for errors, and return additional promises or synchronous values.
 
-Promises are created with the new Promise() keyword, which in Javascript constructs a Promise object which takes a function as an argument that in turn takes two default functions as parameters: resolve and reject. Resolve, which is mandatory, executes upon successful completion of the promise and it can take a parameter that it will return as a value upon completion. Reject is optional and executes if there is an error from the promise.
+Promises are created with the new Promise() keyword, which in Javascript constructs a Promise object which takes a function as an argument that in turn takes two default functions as parameters: resolve and reject. Resolve, which is mandatory, executes upon successful completion of the promise and it can take a parameter that it will return as a value upon completion. Reject is optional and executes if there is an error from the promise. A best practice is to just specify the resolve option and catch all the errors at the end.
 
 The Promise object has a .then() method that we use to interact with the promise and chain additional promises. It takes the result of the object and returns more promises or synchronous values, or it can be used to throw synchronous errors.
 
@@ -52,3 +54,4 @@ http://www.mattgreer.org/articles/promises-in-wicked-detail/
 For more about the event loop, see:
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop#Runtime_concepts
 https://hackernoon.com/understanding-js-the-event-loop-959beae3ac40
+https://blog.sessionstack.com/how-javascript-works-event-loop-and-the-rise-of-async-programming-5-ways-to-better-coding-with-2f077c4438b5

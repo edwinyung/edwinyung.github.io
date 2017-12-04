@@ -1,0 +1,29 @@
+SQL
+
+Normalization: This is a fancy term that defines the best practices for database design. Rows are data instances, whereas columns represent attributes (think spreadsheet). Data is related to each other in tables through 3 key principles: 1) each column should be atomized; 2) every column must depend on the entirety of the composite key; and 3) all columns are only dependent on the primary key.
+
+Self joins are the most confusing of all the joins. A self join is just like any other inner join, with the caveat that the table in question is duplicated. You need different aliases for each table to help the computer learn from itself. The tables are linked through a single column rather than two different ones on two different tables. As a result, this particular column will not be duplicated and act as the key.
+
+NoSQL as expressed through MongoDB
+
+Things similar to SQL:
+Aggregation functions: Your favorite workhorses such as COUNT, MIN, and MAX are back.
+Grouping:
+Aliasing:
+
+Things not similar to SQL:
+Tables are called collections and data records are called documents.
+No Joins: Joins are already done automatically in MongoDB. Yes, MongoDB supports some relational functionality such as $lookup, but if you are doing joins all the time, it's time to think about whether you should be doing NoSQL in the first place.
+No Schema: MongoDB follows data denormalization. It nests collections instead of splitting them up into atoms. As a result of this inlining, duplicated values are allowed and needed. Collections should stand apart, rather than relational tables.
+No Transactions: MongoDB does not have an "all or nothing" approach where if a data operation fails, then the operation is rolled back. In SQL, any database modification is duplicated in memory and sequentially executed before being put in the database, which allows the command to fail without infringing on the data.
+
+Use cases:
+MongoDB is great for tracking, querying rapidly, and logging data. It is best used for situations where the database does not need to be updated frequently. Think of doing analytics and logging of user clicks on a website that would require multiple server requests.
+
+Why shouldn't we use arrow functions in MongoDB?
+We use function() because this. would refer to the actual database collection, whereas the arrow function's this. will refer to the lexical scope in which it is defined (outside of the arrow function). This is usually the global environment.
+
+For more information, read this: https://stackoverflow.com/questions/34361379/arrow-function-vs-function-declaration-expressions-are-they-equivalent-exch
+
+If you were planning on installing MongoDB on a 32 bit Linux (like me), follow this link:
+https://dzone.com/articles/installing-mongodb-on-32-bit-ubuntu-1510
