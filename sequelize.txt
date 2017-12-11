@@ -1,0 +1,108 @@
+
+Sequelize is a Javascript ORM (https://en.wikipedia.org/wiki/Object-relational_mapping) that we use to extract and parse data from a PostgreSQL database for applications in Node.js
+
+Reminder when using PostgreSQL:
+Single quotation ('') return text strings.
+Double quotation ("") return case sensitive text.
+Avoid double quotation unless you want to use it every single time. Adjust your Prettier/Beautify settings.
+(http://blog.lerner.co.il/quoting-postgresql/)
+
+Sequelize
+
+
+Associations
+One:One
+Need to put .hasOne in both tables (for example, the User and Profile models). When using .hasOne, Sequelize reads the other table for the foreign key.
+
+One:Many
+We don't have to set any foreign keys on the source table
+.hasMany method should be in the "One"/source table (e.g. User) with the foreign key being the same as the belongsTo
+.belongsTo should be in "Many"/target table (e.g. Cars) with the foreign key on the "One" table
+
+Many:Many
+We need a JOIN model. Recall that in SQL, we need to join the two tables for a many-to-many relationship. The joined table has associations of .belongsTo to both constituent tables. Each constituent table has a .hasMany and .belongsToMany  association to the other table.
+
+Transactions
+A transaction is an operation performed on a database as a series of steps that must be completed as a unit. If a step fails, then the whole operation is rolled back. If it succeeds, it is committed. For example, a bank transfer is a transaction. Transactions are either managed (automatically done) or unamanged (manually done by the user).
+
+Hooks
+Think of these as callbacks. Hooks are functions that are invoked when a specific event happens. Usually, you run hooks to do something before or after various CRUD operations such as creating, destroying, validating, saving, and updating.
+
+Indexes
+Think of these as pointers stored in a hash table/B-tree. Like an index in the back of a reference book, indexes are lookup tables for a column's values that the database uses to efficiently search.
+
+Generally, if the column will be listed in a WHERE operator, use an index.
+
+To create a B-tree index on the column title in the table films:
+CREATE UNIQUE INDEX title_idx ON films (title);
+https://www.postgresql.org/docs/9.6/static/sql-createindex.html
+
+In Sequelize, indexes are added in the migration function by chaining .then(). For example,
+
+// migrations/create-something.js
+
+module.exports = {
+  up: function(queryInterface, Sequelize) {
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.INTEGER,
+  },
+  name: {
+    type: Sequelize.STRING,
+  },
+  sku: {
+    type: Sequelize.INTEGER,
+  },
+  description: {
+    type: Sequelize.STRING,
+  },
+  price: {
+    type: Sequelize.INTEGER,
+  },
+  categoryId: {
+    type: Sequelize.INTEGER,
+  },
+  createdAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.fn('NOW'),
+  },
+  updatedAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.fn('NOW'),
+  },
+})
+  .then(() => {
+    return queryInterface.addIndex('Something', ['name']);
+  })
+  .then(() => {
+    return queryInterface.addIndex('Something', ['description']);
+  })
+},
+down: (queryInterface, Sequelize) => {
+return queryInterface.dropTable('Products');
+},
+};
+
+
+};
+
+Examples of Using Sequelize
+
+ATTRIBUTES (similar to projection in MongoDB)
+User.findAll({attributes: ['name', 'email']}).then(lg)
+//[{name: 'Foo', email: 'foobar@gmail.com'}]
+
+OPERATORS
+[Op.ne]: 'foo'
+[Op.in]: categories
+[Op.between]: [1, 2]
+
+
+WHERE
+sequelize.where(sequelize.fn('Date_TRUNC','YEAR', sequelize.col('dates')), '>=', '2017')
+$lte
+$gte

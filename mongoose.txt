@@ -1,0 +1,38 @@
+Schemas
+Every database needs a schema definition: something that will specify the different data types and attributes/columns. In Mongoose, schemas are implemented through models.
+For example,
+
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
+var UserSchema = new Schema({
+  name: String
+}, {
+  timestamps: true //options are set here after the settings.  Timestamps automatically create updatedAt and createdAt column attributes in the object for each document
+});
+
+//Create a model with the first argument being the name of the model and the second argument being the schema object
+var User = mongoose.model('User', UserSchema)
+
+Virtuals are getters and setters that are not stored in the database and are useful in situations when you want values that are derived from other properties. Tend to avoid these because it introduces another layer of unnecessary abstraction.
+
+How do we allow models to inherit from other models?
+Through discriminator keys.
+First, crate a model that will be the parent of other inherited models and assign a discriminatorKey: 'kind' right after the timestamps option above.
+
+Then, we use the .discriminator methods in the child models by calling .discriminator on the parents but passing in the arguments of the child model and the child schema. For example,
+
+var Comment = Commentable.discrimnator('post', PostSchema)
+
+
+Updating
+Since updating and saving
+foo.update()
+bar.updateMany()
+baz.save()
+
+
+Populating
+The Populate method is a way to mimic SQL joins in MongoDB. Once the user specifies paths in the document, populate can be used to repalce this with documents from the same collection or others.
+
+User.populate('profile')

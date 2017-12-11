@@ -1,7 +1,5 @@
 Testing in Node
 
-The best way to test in Node is to
-
 Test-Driven Development (TDD) is summarized through three steps:
 1) Red: Write tests that will fail but will have your expected output
 2) Green: Make the tests pass

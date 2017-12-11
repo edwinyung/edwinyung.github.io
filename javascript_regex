@@ -1,0 +1,15 @@
+(?=.*[A-Z])
+
+capture groups
+
+flags
+g
+i
+^$
+
+?=
+
+
+test
+exec
+match

@@ -21,9 +21,17 @@ Use cases:
 MongoDB is great for tracking, querying rapidly, and logging data. It is best used for situations where the database does not need to be updated frequently. Think of doing analytics and logging of user clicks on a website that would require multiple server requests.
 
 Why shouldn't we use arrow functions in MongoDB?
-We use function() because this. would refer to the actual database collection, whereas the arrow function's this. will refer to the lexical scope in which it is defined (outside of the arrow function). This is usually the global environment.
+We use function() because this. would refer to the actual database collection, whereas the arrow function's this. will refer to the lexical scope in which it is defined (the environment outside of the arrow function). The lexical this. is one of the ways this. is determined.
+This. is a placeholder that is defined by several ways:
+1) the lexical this
+2) using the new keyword
+3) explicitly binded by using the call, apply, and bind methods
+Remember, call, apply, and bind have an "thisArg" as their first parameter, which is the valued to be passed as this. It is usually an object.
+4) implicitly binded by using the containing object
+5) default binding of the global object when the function is standalone
 
 For more information, read this: https://stackoverflow.com/questions/34361379/arrow-function-vs-function-declaration-expressions-are-they-equivalent-exch
+https://medium.freecodecamp.org/the-definitive-javascript-handbook-for-a-developer-interview-44ffc6aeb54e
 
 If you were planning on installing MongoDB on a 32 bit Linux (like me), follow this link:
 https://dzone.com/articles/installing-mongodb-on-32-bit-ubuntu-1510
